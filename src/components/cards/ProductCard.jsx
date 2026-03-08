@@ -15,6 +15,7 @@ const ProductCard = ({ product }) => {
           height={180}
           src={image}
           alt={title}
+          unoptimized
           className="rounded-md w-full h-48 object-cover"
         />
       </figure>

@@ -15,11 +15,12 @@ const Banner = () => {
           Explore Products
         </button>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 justify-center flex items-center">
         <Image
           alt="Buy Every toy with up to 15% Discount"
           width={500}
           height={400}
+          className="w-auto h-auto"
           src={"/assets/hero.png"}
         ></Image>
       </div>

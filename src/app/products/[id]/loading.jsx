@@ -2,7 +2,7 @@ const ProductDetailsSkeleton = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
       {/* Image Skeleton */}
-      <div className="skeleton h-[420px] w-full rounded-xl"></div>
+      <div className="skeleton h-105 w-full rounded-xl"></div>
 
       {/* Content Skeleton */}
       <div className="space-y-4">

@@ -6,34 +6,72 @@ import React from "react";
 import { FaCartPlus, FaStar } from "react-icons/fa";
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
-  const product = await getSingleProduct(id); // DB / API fetch
+  const { id } =await params;
+  const product = await getSingleProduct(id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found | Hero Kidz",
+      description: "The product you are looking for does not exist.",
+    };
+  }
+
+  const {
+    title,
+    description,
+    image,
+    price,
+    discount,
+    ratings,
+    reviews,
+  } = product;
+
+  const discountedPrice = price - (price * discount) / 100;
+
+  const url = `https://hero-kidz-gamma-lemon.vercel.app/product/${id}`;
 
   return {
-    title: product.title,
-    description:
-      product.description.slice(0, 160) ||
-      "Educational toy designed to help kids learn through play.",
+    title: `${title} | Hero Kidz`,
+    description: description?.slice(0, 160),
+
+    metadataBase: new URL(
+      "https://hero-kidz-gamma-lemon.vercel.app"
+    ),
 
     openGraph: {
-      title: product.title,
-      description:
-        "Fun and educational learning toy for kids. Safe, colorful, and engaging.",
+      title: title,
+      description: description?.slice(0, 160),
+      url: url,
+      siteName: "Hero Kidz",
       images: [
         {
-          url: product.image || "https://i.ibb.co.com/Ld7J2ZYq/image.png",
+          url: image,
           width: 1200,
           height: 630,
-          alt: product.title,
+          alt: title,
         },
       ],
+      type: "website",
     },
 
     twitter: {
       card: "summary_large_image",
-      title: product.title,
-      description: "Fun and educational learning toy for kids.",
-      images: [product.image || "https://i.ibb.co.com/Ld7J2ZYq/image.png"],
+      title: title,
+      description: description?.slice(0, 160),
+      images: [image],
+    },
+
+    keywords: [
+      title,
+      "kids products",
+      "children toys",
+      "kids shopping",
+      "Hero Kidz",
+      "kids store",
+    ],
+
+    alternates: {
+      canonical: url,
     },
   };
 }
@@ -41,7 +79,6 @@ export async function generateMetadata({ params }) {
 const ProductDetails = async ({ params }) => {
   const { id } = await params;
   const product = await getSingleProduct(id);
-  console.log(product);
 
   const {
     title,
@@ -67,7 +104,7 @@ const ProductDetails = async ({ params }) => {
           height={420}
           src={image}
           alt={title}
-          className="w-full h-[420px] object-cover"
+          className="w-full h-105 object-cover"
         />
       </div>
 
