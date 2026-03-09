@@ -1,24 +1,24 @@
 "use clinet";
 import { signIn } from "next-auth/react";
-import { redirect } from "next/dist/server/api-utils";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import Swal from "sweetalert2";
+
 
 const SocialButton = () => {
   const searchParams = useSearchParams();
 
-  const handleSignIn = async () => {
-    const result = await signIn("google", {
-      redirect: "false",
-      callbackUrl: searchParams.get("callbackUrl") || "/",
-    });
-    if (result.ok) {
-      Swal.fire("success", "Welcome", "success");
-    } else {
-      Swal.fire("error", "Please Try Again", "error");
+  const handleSignIn = () => {
+    // 1. Safely grab the callback URL (fixing the 'null' bug)
+    let callback = searchParams.get("callbackUrl");
+    if (!callback || callback === "null") {
+      callback = "/";
     }
+
+    // 2. Call Google Sign In
+    // Note: We do not 'await' or use 'redirect: false' for Google.
+    // NextAuth will automatically redirect the user to Google's website.
+    signIn("google", { callbackUrl: callback });
   };
   return (
     <button

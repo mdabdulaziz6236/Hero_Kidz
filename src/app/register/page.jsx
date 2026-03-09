@@ -6,12 +6,14 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 
 export default function RegisterPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const callbackUrl = searchParams.get("callbackUrl" || "/");
+  let callback = searchParams.get("callbackUrl") || "/";
+  if (!callback || callback === "null") {
+    callback = "/";
+  }
 
   // 1. Set up the state
   const [form, setForm] = useState({
@@ -29,14 +31,19 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await postUser(form);
-
     if (result.acknowledged) {
       // router.push("/login");
-      const result = await signIn("credentials", {
+      const signInResult = await signIn("credentials", {
         email: form.email,
         password: form.password,
-        callbackUrl: callbackUrl,
+        redirect: false,
+        callbackUrl: callback,
       });
+      if (signInResult.ok) {
+        router.push(callback);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     } else {
       alert("Something went wrong. Please try again.");
     }

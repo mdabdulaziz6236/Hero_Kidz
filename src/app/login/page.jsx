@@ -4,11 +4,14 @@ import { useState } from "react";
 import { signIn } from "next-auth/react"; // We will use this soon!
 import Swal from "sweetalert2";
 import SocialButton from "@/components/auth/SocialButton";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 export default function LoginPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const callback = searchParams.get("callbackUrl"||'/')
-
+  let callback = searchParams.get("callbackUrl");
+  if (!callback || callback === "null") {
+    callback = "/";
+  }
   // 1. Set up the state for email and password
   const [form, setForm] = useState({
     email: "",
@@ -31,6 +34,7 @@ export default function LoginPage() {
     const result = await signIn("credentials", {
       email: form.email,
       password: form.password,
+      redirect: false,
       callbackUrl: searchParams.get("callbackUrl") || "/",
     });
     if (result?.error) {
@@ -51,6 +55,8 @@ export default function LoginPage() {
     `,
         },
       });
+    } else {
+      router.push(callback);
     }
   };
 

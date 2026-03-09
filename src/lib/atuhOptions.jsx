@@ -25,7 +25,6 @@ export const authOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log(user, account, profile, email, credentials);
       const isExist = await dbConnect(collections.USERS).findOne({
         email: user.email,
         provider: account?.provider,

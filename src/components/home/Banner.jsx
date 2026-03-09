@@ -22,6 +22,7 @@ const Banner = () => {
           height={400}
           className="w-auto h-auto"
           src={"/assets/hero.png"}
+          priority
         ></Image>
       </div>
     </div>
