@@ -1,7 +1,6 @@
 "use server";
 
 import { dbConnect , collections } from "@/lib/dbConnet";
-// import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
 export const getProducts = async () => {

@@ -3,7 +3,7 @@ import CartButton from "@/components/buttons/CartButton";
 
 import Image from "next/image";
 import React from "react";
-import { FaCartPlus, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 export async function generateMetadata({ params }) {
   const { id } =await params;

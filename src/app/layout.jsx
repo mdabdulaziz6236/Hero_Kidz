@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import NextAuthProvider from "@/provider/NextAuthProvider";
 
 // Google font
 const poppins = Poppins({
@@ -12,7 +13,7 @@ const poppins = Poppins({
 
 // Local Bangla font
 export const fontBangla = localFont({
-  src: './../fonts/mayaboti-Italic.ttf',
+  src: "./../fonts/mayaboti-Italic.ttf",
 });
 
 export const metadata = {
@@ -80,18 +81,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${poppins.className} antialiased`}>
-        <header className="py-2 md:w-11/12 mx-auto">
-          <Navbar />
-        </header>
-        <main className="py-2 min-h-[calc(100svh-302px)] md:w-11/12 mx-auto">
-          {children}
-        </main>
-        <footer>
-          <Footer />
-        </footer>
-      </body>
-    </html>
+    <NextAuthProvider>
+      <html lang="en">
+        <body className={`${poppins.className} antialiased`}>
+          <header className="py-2 md:w-11/12 mx-auto">
+            <Navbar />
+          </header>
+          <main className="py-2 min-h-[calc(100svh-302px)] md:w-11/12 mx-auto">
+            {children}
+          </main>
+          <footer>
+            <Footer />
+          </footer>
+        </body>
+      </html>
+    </NextAuthProvider>
   );
 }

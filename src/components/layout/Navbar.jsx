@@ -3,6 +3,7 @@ import Logo from "./logo";
 import Navlink from "../buttons/NavLink";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
+import AuthButton from "../buttons/AuthButton";
 
 const Navbar = () => {
   const nav = (
@@ -60,9 +61,7 @@ const Navbar = () => {
             <FaCartShopping />
           </button>
         </Link>
-        <Link href={"/login"}>
-          <button className="btn btn-outline btn-primary">Login</button>
-        </Link>
+        <AuthButton></AuthButton>
       </div>
     </div>
   );
