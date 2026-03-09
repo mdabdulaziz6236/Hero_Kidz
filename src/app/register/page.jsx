@@ -1,14 +1,18 @@
-'use client'; 
+"use client";
 
 import { postUser } from "@/actions/server/auth";
+import SocialButton from "@/components/auth/SocialButton";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  
+  const callbackUrl = searchParams.get("callbackUrl" || "/");
+
   // 1. Set up the state
   const [form, setForm] = useState({
     name: "",
@@ -25,10 +29,14 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await postUser(form);
-    
+
     if (result.acknowledged) {
-      alert("Successful! Please login.");
-      router.push("/login");
+      // router.push("/login");
+      const result = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        callbackUrl: callbackUrl,
+      });
     } else {
       alert("Something went wrong. Please try again.");
     }
@@ -37,7 +45,6 @@ export default function RegisterPage() {
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-200px)] bg-base-100 p-4">
       <div className="card w-full max-w-md shadow-xl bg-base-100 border border-base-200">
-        
         {/* 4. Connect handleSubmit to the form */}
         <form onSubmit={handleSubmit} className="card-body p-6 sm:p-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 text-neutral">
@@ -77,6 +84,7 @@ export default function RegisterPage() {
               placeholder="email@example.com"
               className="input input-bordered w-full focus:border-primary focus:outline-none"
               required
+              autoComplete="username" // <-- Add this line here
             />
           </div>
 
@@ -95,24 +103,22 @@ export default function RegisterPage() {
               placeholder="********"
               className="input input-bordered w-full focus:border-primary focus:outline-none"
               required
+              autoComplete="current-password" // <-- Add this line here
             />
           </div>
 
           <div className="form-control mt-6">
-            <button type="submit" className="btn btn-primary text-white w-full text-lg">
+            <button
+              type="submit"
+              className="btn btn-primary text-white w-full text-lg"
+            >
               Register
             </button>
           </div>
 
           <div className="divider text-sm text-neutral/50 my-4">OR</div>
 
-          <button
-            type="button"
-            className="btn btn-outline hover:bg-base-200 text-neutral w-full"
-          >
-            <FcGoogle className="text-2xl" />
-            Continue with Google
-          </button>
+          <SocialButton></SocialButton>
 
           <p className="text-center mt-6 text-sm text-neutral">
             Already have an account?{" "}

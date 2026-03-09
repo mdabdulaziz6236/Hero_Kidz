@@ -1,14 +1,13 @@
-"use client"; 
-
+"use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react"; // We will use this soon!
 import Swal from "sweetalert2";
-
+import SocialButton from "@/components/auth/SocialButton";
+import { useSearchParams } from "next/navigation";
 export default function LoginPage() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callback = searchParams.get("callbackUrl"||'/')
 
   // 1. Set up the state for email and password
   const [form, setForm] = useState({
@@ -32,7 +31,7 @@ export default function LoginPage() {
     const result = await signIn("credentials", {
       email: form.email,
       password: form.password,
-      redirect: false,
+      callbackUrl: searchParams.get("callbackUrl") || "/",
     });
     if (result?.error) {
       Swal.fire({
@@ -52,8 +51,6 @@ export default function LoginPage() {
     `,
         },
       });
-    } else {
-      router.push("/");
     }
   };
 
@@ -122,18 +119,12 @@ export default function LoginPage() {
           <div className="divider text-sm text-neutral/50 my-4">OR</div>
 
           {/* We will add NextAuth Google login to this button later */}
-          <button
-            type="button"
-            className="btn btn-outline hover:bg-base-200 text-neutral w-full"
-          >
-            <FcGoogle className="text-2xl" />
-            Continue with Google
-          </button>
+          <SocialButton></SocialButton>
 
           <p className="text-center mt-6 text-sm text-neutral">
             Don't have an account?{" "}
             <Link
-              href="/register"
+              href={`/register?callbackUrl=${callback}`}
               className="text-primary font-bold hover:underline"
             >
               Register here
